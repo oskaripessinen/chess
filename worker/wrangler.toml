@@ -1,0 +1,12 @@
+name = "chess-worker"
+main = "src/index.ts"
+compatibility_date = "2026-05-02"
+
+[durable_objects]
+bindings = [
+  { name = "CHESS_GAME", class_name = "ChessGame" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ChessGame"]
