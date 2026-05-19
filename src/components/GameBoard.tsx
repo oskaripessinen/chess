@@ -16,9 +16,11 @@ type GameBoardProps = {
 
 export function GameBoard({ fen, role, turn, disabled, onMove }: GameBoardProps) {
   const orientation = role === 'black' ? 'black' : 'white';
+  const isSpectator = role === 'spectator';
+  const interactive = !disabled && !isSpectator;
 
   function canDragPiece({ piece }: PieceHandlerArgs) {
-    if (disabled || role === 'spectator') {
+    if (!interactive) {
       return false;
     }
 
@@ -27,7 +29,7 @@ export function GameBoard({ fen, role, turn, disabled, onMove }: GameBoardProps)
   }
 
   function handlePieceDrop({ sourceSquare, targetSquare }: PieceDropHandlerArgs) {
-    if (!targetSquare) {
+    if (!interactive || !targetSquare) {
       return false;
     }
 
@@ -49,6 +51,7 @@ export function GameBoard({ fen, role, turn, disabled, onMove }: GameBoardProps)
         options={{
           position: fen,
           boardOrientation: orientation,
+          allowDragging: interactive,
           canDragPiece,
           onPieceDrop: handlePieceDrop,
           animationDurationInMs: 120,
