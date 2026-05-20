@@ -8,7 +8,7 @@ A small two-player chess app you can play in the browser. No accounts, no signup
 - The backend is a Cloudflare Worker. Each game lives inside a Durable Object so all the state for one game (board, clocks, players) is in one place.
 - The browser talks to the worker over WebSocket for moves and over REST when creating or joining a game.
 - Move legality is checked with `chess.js` on both sides. The server is the source of truth.
-- Clocks use the Durable Object alarm API instead of a polling loop, so the server basically sleeps until either a move comes in or someone runs out of time.
+- Clocks use the Durable Object alarm API instead of a polling loop, so the server sleeps until either a move comes in or someone runs out of time.
 
 ## Running locally
 
