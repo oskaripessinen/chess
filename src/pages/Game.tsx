@@ -49,7 +49,6 @@ export function Game({ gameId, onHome }: GameProps) {
     return (
       <main className="center-page">
         <section className="panel narrow-panel">
-          <p className="kicker">Error</p>
           <h1>Could not join the game</h1>
           <p>{joinError}</p>
           <button type="button" onClick={onHome}>
@@ -64,7 +63,6 @@ export function Game({ gameId, onHome }: GameProps) {
     return (
       <main className="center-page">
         <section className="panel narrow-panel">
-          <p className="kicker">Connecting</p>
           <h1>Loading game state</h1>
           <p>{socket.error ?? (joining ? 'Joining the game.' : 'Opening game connection.')}</p>
         </section>
@@ -99,10 +97,10 @@ function GameContent({ state, connected, error, receivedAt, sendMessage }: GameC
   const [replayIndex, setReplayIndex] = useState<number | null>(null);
   const displayFen = getDisplayFen(state, replayIndex);
   const isReplay = replayIndex !== null;
-  const canInteract = !isReplay && state.role !== 'spectator' && state.status === 'active';
+  const canInteract = !isReplay && state.status === 'active';
   const showReplay = state.status === 'finished' && state.moves.length > 0;
-  const canUseRematch = state.status === 'finished' && state.role !== 'spectator';
-  const bottomColor: PlayerColor = state.role === 'black' ? 'black' : 'white';
+  const canUseRematch = state.status === 'finished';
+  const bottomColor: PlayerColor = state.role;
   const topColor: PlayerColor = bottomColor === 'white' ? 'black' : 'white';
 
   useEffect(() => {
@@ -154,7 +152,7 @@ function GameContent({ state, connected, error, receivedAt, sendMessage }: GameC
             <button
               type="button"
               className="secondary-button"
-              disabled={state.status !== 'active' || state.role === 'spectator'}
+              disabled={state.status !== 'active'}
               onClick={() => sendMessage({ type: 'offer_draw' })}
             >
               Offer draw
@@ -162,7 +160,7 @@ function GameContent({ state, connected, error, receivedAt, sendMessage }: GameC
             <button
               type="button"
               className="danger-button"
-              disabled={state.status !== 'active' || state.role === 'spectator'}
+              disabled={state.status !== 'active'}
               onClick={() => sendMessage({ type: 'resign' })}
             >
               Resign

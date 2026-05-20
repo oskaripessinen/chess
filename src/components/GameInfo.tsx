@@ -18,7 +18,6 @@ export function GameInfo({ state, connected, error }: GameInfoProps) {
 
   return (
     <section className="game-info">
-      <p className="kicker">Game {state.gameId}</p>
       <h1>{describeStatus(state.status)}</h1>
       {state.result ? <p className="result-text">{describeGameResult(state.result)}</p> : null}
       <dl className="summary-list compact-list">
@@ -49,10 +48,6 @@ export function GameInfo({ state, connected, error }: GameInfoProps) {
 }
 
 function getOpponentConnected(state: PublicGameState): string {
-  if (state.role === 'spectator') {
-    return state.players.whiteConnected && state.players.blackConnected ? 'Both players online' : 'Waiting for a player';
-  }
-
   const connected = state.role === 'white' ? state.players.blackConnected : state.players.whiteConnected;
   return connected ? 'Online' : 'Offline';
 }

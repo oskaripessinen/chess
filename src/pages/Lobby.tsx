@@ -24,7 +24,6 @@ export function Lobby({ state, connected, error }: LobbyProps) {
   return (
     <main className="center-page">
       <section className="panel lobby-panel">
-        <p className="kicker">Lobby</p>
         <h1>Waiting for an opponent</h1>
         <p className="muted-text">
           {connected ? 'Connection is open.' : 'Reconnecting.'} {error ?? ''}
@@ -47,11 +46,7 @@ export function Lobby({ state, connected, error }: LobbyProps) {
           </div>
           <div>
             <dt>Color</dt>
-            <dd>{state.role === 'spectator' ? 'Spectator' : describeColor(state.role)}</dd>
-          </div>
-          <div>
-            <dt>Spectators</dt>
-            <dd>{state.settings.allowSpectators ? 'Allowed' : 'Not allowed'}</dd>
+            <dd>{describeColor(state.role)}</dd>
           </div>
         </dl>
       </section>

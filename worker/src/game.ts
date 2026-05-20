@@ -29,7 +29,6 @@ type StoredGame = {
   status: GameStatus;
   settings: GameSettings;
   players: StoredPlayers;
-  spectators: PlayerToken[];
   fen: string;
   turn: BoardTurn;
   clocks: ClockState;
@@ -130,7 +129,6 @@ export class ChessGame {
         white: creatorColor === 'white' ? creatorToken : null,
         black: creatorColor === 'black' ? creatorToken : null,
       },
-      spectators: [],
       fen: chess.fen(),
       turn: chess.turn(),
       clocks: { w: initialClock, b: initialClock },
@@ -161,40 +159,28 @@ export class ChessGame {
       return json({ error: 'Game not found.' }, 404);
     }
 
-    if (game.status === 'waiting') {
-      const openColor = getOpenColor(game.players);
-
-      if (openColor) {
-        const playerToken = createToken();
-        game.players[openColor] = playerToken;
-        game.status = 'active';
-        game.turnStartedAt = game.settings.timeControl === 'none' ? null : Date.now();
-        await this.saveGame(game);
-        await this.scheduleAlarm(game);
-        this.broadcastState(game);
-
-        const response: JoinGameResponse = {
-          gameId: game.gameId,
-          playerToken,
-          role: openColor,
-        };
-
-        return json(response, 200);
-      }
+    if (game.status !== 'waiting') {
+      return json({ error: 'The game is full.' }, 409);
     }
 
-    if (!game.settings.allowSpectators) {
+    const openColor = getOpenColor(game.players);
+
+    if (!openColor) {
       return json({ error: 'The game is full.' }, 409);
     }
 
     const playerToken = createToken();
-    game.spectators.push(playerToken);
+    game.players[openColor] = playerToken;
+    game.status = 'active';
+    game.turnStartedAt = game.settings.timeControl === 'none' ? null : Date.now();
     await this.saveGame(game);
+    await this.scheduleAlarm(game);
+    this.broadcastState(game);
 
     const response: JoinGameResponse = {
       gameId: game.gameId,
       playerToken,
-      role: 'spectator',
+      role: openColor,
     };
 
     return json(response, 200);
@@ -672,10 +658,6 @@ export class ChessGame {
       return 'black';
     }
 
-    if (game.spectators.includes(token)) {
-      return 'spectator';
-    }
-
     return null;
   }
 
@@ -840,8 +822,7 @@ function isGameSettings(value: unknown): value is GameSettings {
 
   return (
     (value.timeControl === '5min' || value.timeControl === '10min' || value.timeControl === 'none') &&
-    (value.playerColor === 'white' || value.playerColor === 'black' || value.playerColor === 'random') &&
-    typeof value.allowSpectators === 'boolean'
+    (value.playerColor === 'white' || value.playerColor === 'black' || value.playerColor === 'random')
   );
 }
 

@@ -3,14 +3,13 @@ export type PlayerToken = string;
 export type PlayerColor = 'white' | 'black';
 export type BoardTurn = 'w' | 'b';
 export type GameStatus = 'waiting' | 'active' | 'finished';
-export type PlayerRole = PlayerColor | 'spectator';
+export type PlayerRole = PlayerColor;
 export type TimeControl = '5min' | '10min' | 'none';
 export type ColorChoice = PlayerColor | 'random';
 
 export type GameSettings = {
   timeControl: TimeControl;
   playerColor: ColorChoice;
-  allowSpectators: boolean;
 };
 
 export type GameResult = {
@@ -66,7 +65,7 @@ export type CreateGameResponse = {
 export type JoinGameResponse = {
   gameId: GameId;
   playerToken: PlayerToken;
-  role: PlayerRole;
+  role: PlayerColor;
 };
 
 export type GameInfoResponse = {

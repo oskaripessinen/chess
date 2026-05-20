@@ -11,7 +11,6 @@ type CreateProps = {
 export function Create({ onBack, onCreated }: CreateProps) {
   const [timeControl, setTimeControl] = useState<TimeControl>('10min');
   const [playerColor, setPlayerColor] = useState<ColorChoice>('random');
-  const [allowSpectators, setAllowSpectators] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -21,7 +20,7 @@ export function Create({ onBack, onCreated }: CreateProps) {
     setError(null);
 
     try {
-      const response = await createGame({ timeControl, playerColor, allowSpectators });
+      const response = await createGame({ timeControl, playerColor });
       storePlayerToken(response.gameId, response.playerToken);
       onCreated(response.gameId);
     } catch (requestError) {
@@ -38,7 +37,6 @@ export function Create({ onBack, onCreated }: CreateProps) {
           Back
         </button>
         <div>
-          <p className="kicker">New game</p>
           <h1>Game settings</h1>
         </div>
 
@@ -107,28 +105,6 @@ export function Create({ onBack, onCreated }: CreateProps) {
               onChange={() => setPlayerColor('random')}
             />
             Random
-          </label>
-        </fieldset>
-
-        <fieldset>
-          <legend>Privacy</legend>
-          <label>
-            <input
-              type="radio"
-              name="allowSpectators"
-              checked={!allowSpectators}
-              onChange={() => setAllowSpectators(false)}
-            />
-            Players with link only
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="allowSpectators"
-              checked={allowSpectators}
-              onChange={() => setAllowSpectators(true)}
-            />
-            Allow spectators
           </label>
         </fieldset>
 

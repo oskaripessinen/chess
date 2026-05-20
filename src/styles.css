@@ -113,11 +113,11 @@ p {
 
 h1 {
   margin-bottom: 0.85rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Garamond", "EB Garamond", "Hoefler Text", "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", Times, serif;
   font-size: clamp(2rem, 6vw, 3.8rem);
-  font-weight: 650;
-  letter-spacing: -0.035em;
-  line-height: 0.98;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
 }
 
 h2 {

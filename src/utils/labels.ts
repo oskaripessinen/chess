@@ -17,10 +17,6 @@ export function describeColor(color: PlayerColor): string {
 }
 
 export function describeRole(role: PlayerRole): string {
-  if (role === 'spectator') {
-    return 'Spectator';
-  }
-
   return describeColor(role);
 }
 

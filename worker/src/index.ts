@@ -101,17 +101,13 @@ async function readCreateGameRequest(request: Request): Promise<GameSettings | n
     return null;
   }
 
-  const { timeControl, playerColor, allowSpectators } = value;
+  const { timeControl, playerColor } = value;
 
   if (!isTimeControl(timeControl) || !isColorChoice(playerColor)) {
     return null;
   }
 
-  if (typeof allowSpectators !== 'boolean') {
-    return null;
-  }
-
-  return { timeControl, playerColor, allowSpectators } satisfies CreateGameRequest;
+  return { timeControl, playerColor } satisfies CreateGameRequest;
 }
 
 function getRoute(url: URL): GameRoute {
